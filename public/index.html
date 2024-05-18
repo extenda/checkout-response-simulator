@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Response Time Tester</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        #container {
+            text-align: center;
+        }
+        input, button {
+            margin: 10px;
+            padding: 10px;
+            font-size: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <h1>Response Time Tester</h1>
+        <input type="number" id="delayInput" placeholder="Enter delay in ms">
+        <button onclick="simulateResponse()">Simulate Response</button>
+        <button onclick="clearResponse()">Clear</button>
+        <p id="response"></p>
+    </div>
+    <script>
+        async function simulateResponse() {
+            const delayInput = document.getElementById('delayInput').value;
+            const responseElement = document.getElementById('response');
+            responseElement.textContent = 'Waiting for response...';
+
+            const delay = parseInt(delayInput, 10);
+            if (isNaN(delay) || delay < 0) {
+                responseElement.textContent = 'Please enter a valid delay in milliseconds.';
+                return;
+            }
+
+            try {
+                const response = await fetch(`/simulate-delay?delay=${delay}`);
+                const text = await response.text();
+                responseElement.textContent = text;
+            } catch (error) {
+                responseElement.textContent = 'Error fetching response.';
+            }
+        }
+
+        function clearResponse() {
+            document.getElementById('delayInput').value = '';
+            document.getElementById('response').textContent = '';
+        }
+    </script>
+</body>
+</html>
+
