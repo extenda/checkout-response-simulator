@@ -51,13 +51,14 @@
 <body>
     <div id="container">
         <div id="controls">
-            <h1>Checkout Response Simulator</h1>
+            <h1>Checkout Response Tester</h1>
             <input type="number" id="delayInput" placeholder="Enter delay in ms">
-            <button onclick="simulateResponse()">Simulate Response</button>
+            <button onclick="simulateResponse()">Scan Item</button>
             <button onclick="clearResponse()">Clear</button>
         </div>
         <div id="receipt"></div>
     </div>
+    <audio id="beepAudio" src="barcode-scanner-beep-sound.mp3" preload="auto"></audio>
     <script>
         const items = [
             "Apple", "Banana", "Carrot", "Detergent", "Eggs", 
@@ -75,11 +76,14 @@
         async function simulateResponse() {
             const delayInput = document.getElementById('delayInput').value;
             const receiptElement = document.getElementById('receipt');
+            const beepAudio = document.getElementById('beepAudio');
             const delay = parseInt(delayInput, 10);
             if (isNaN(delay) || delay < 0) {
                 alert('Please enter a valid delay in milliseconds.');
                 return;
             }
+
+            beepAudio.play();
 
             try {
                 const response = await fetch(`/simulate-delay?delay=${delay}`);
