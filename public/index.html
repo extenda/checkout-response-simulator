@@ -6,58 +6,96 @@
     <title>Response Time Tester</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Courier New', Courier, monospace;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             height: 100vh;
             margin: 0;
+            background-color: #f8f8f8;
         }
         #container {
+            display: flex;
+            flex-direction: row;
+            background-color: white;
+            border: 1px solid #ccc;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        #controls {
             text-align: center;
+            margin-right: 20px;
         }
         input, button {
             margin: 10px;
             padding: 10px;
             font-size: 1rem;
         }
+        #receipt {
+            text-align: left;
+            border: 1px solid #ccc;
+            padding: 20px;
+            background-color: #fff;
+            width: 200px;
+            height: 300px;
+            overflow-y: auto;
+        }
+        .receipt-entry {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
     <div id="container">
-        <h1>Response Time Tester</h1>
-        <input type="number" id="delayInput" placeholder="Enter delay in ms">
-        <button onclick="simulateResponse()">Simulate Response</button>
-        <button onclick="clearResponse()">Clear</button>
-        <p id="response"></p>
+        <div id="controls">
+            <h1>Checkout Response Simulator</h1>
+            <input type="number" id="delayInput" placeholder="Enter delay in ms">
+            <button onclick="simulateResponse()">Simulate Response</button>
+            <button onclick="clearResponse()">Clear</button>
+        </div>
+        <div id="receipt"></div>
     </div>
     <script>
+        const items = [
+            "Apple", "Banana", "Carrot", "Detergent", "Eggs", 
+            "Flour", "Grapes", "Honey", "Ice Cream", "Juice", 
+            "Ketchup", "Lettuce", "Milk", "Noodles", "Olive Oil", 
+            "Pasta", "Quinoa", "Rice", "Spinach", "Tomato"
+        ];
+
+        function getRandomItem() {
+            const item = items[Math.floor(Math.random() * items.length)];
+            const price = (Math.random() * 10).toFixed(2);
+            return { item, price };
+        }
+
         async function simulateResponse() {
             const delayInput = document.getElementById('delayInput').value;
-            const responseElement = document.getElementById('response');
-            responseElement.textContent = 'Waiting for response...';
-
+            const receiptElement = document.getElementById('receipt');
             const delay = parseInt(delayInput, 10);
             if (isNaN(delay) || delay < 0) {
-                responseElement.textContent = 'Please enter a valid delay in milliseconds.';
+                alert('Please enter a valid delay in milliseconds.');
                 return;
             }
 
             try {
                 const response = await fetch(`/simulate-delay?delay=${delay}`);
                 const text = await response.text();
-                responseElement.textContent = text;
+                const { item, price } = getRandomItem();
+                const entry = `<div class="receipt-entry">${item} <span>$${price}</span></div>`;
+                receiptElement.innerHTML += entry;
             } catch (error) {
-                responseElement.textContent = 'Error fetching response.';
+                receiptElement.innerHTML += `<div class="receipt-entry">Error fetching response.</div>`;
             }
         }
 
         function clearResponse() {
             document.getElementById('delayInput').value = '';
-            document.getElementById('response').textContent = '';
+            document.getElementById('receipt').innerHTML = '';
         }
     </script>
 </body>
 </html>
-
