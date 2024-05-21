@@ -39,14 +39,14 @@ This project provides a simple web application that allows users to simulate and
 
 1. Open the web page in your browser.
 2. Enter a delay value in milliseconds in the input field.
-3. Click the "Simulate Response" button to see the simulated response time.
+3. Click the "Scan Item" button to see the simulated response time as the receipt builds up.
 4. Click the "Clear" button to reset the input and the response message.
 
 ## Example
 
 - Enter `1000` in the input field (for a 1-second delay).
-- Click "Simulate Response".
-- The response message will display "Waiting for response..." and then update to "Response received after 1000 ms." after 1 second.
+- Click "Scan Item".
+- The receipt will build up with a 1000ms (1 sec) delay.
 
 ## License
 
